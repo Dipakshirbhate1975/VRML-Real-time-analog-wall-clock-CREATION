@@ -1,0 +1,218 @@
+#VRML V2.0 utf8
+WorldInfo {
+ title "BY DR DIPAK V SHIRBHATE"
+ info ["This Web3D Content was created with Vivaty Studio, a Web3D authoring tool"
+ "www.mediamachines.com"
+ "This Web3D Content was created with Vivaty Studio, a Web3D authoring tool"
+ "This Web3D Content was created with Vivaty Studio, a Web3D authoring tool"
+ "This Web3D Content was created with Vivaty Studio, a Web3D authoring tool"]
+}
+## Vizthumbnail  Thumb_Untitled2_wrl3710061587442985.jpg
+DEF Import_Untitled6_wrl0 Group {
+ children [
+  DEF WC NavigationInfo {
+   avatarSize [
+    .25 1.6 .75
+   ]
+   visibilityLimit 0
+   speed 1
+   headlight TRUE
+   type ["WALK"
+   "ANY"]
+  }
+  DEF dad_DIAL Transform {
+   translation 0 .01573 .80701
+   rotation -1 0 0 1.571
+   children [
+    DEF DIAL Shape {
+     appearance Appearance {
+      material DEF White Material {
+       ambientIntensity 0.200
+       shininess 0.200
+       diffuseColor 1 1 1
+      }
+     }
+     geometry DEF GeoCylinder1 Cylinder {
+      height 0.200
+      radius 3.000
+     }
+    }
+   ]
+  }
+  DEF Transform3 Transform {
+   children [
+    DEF dad_HOURHAND Transform {
+     rotation 1 0 0 1.571
+     scale 1.5 1 .9
+     children [
+      DEF HOURHAND Shape {
+       appearance Appearance {
+        material DEF Green Material {
+         ambientIntensity 0.200
+         shininess 0.200
+         diffuseColor 0 1 0
+        }
+       }
+       geometry DEF GeoSweptSurface3 Extrusion {
+        creaseAngle 0.524
+        crossSection [
+         -.06229 -.00366
+         .08427 -.00366
+         .04763 -2.34126
+         -.06229 -.00366
+        ]
+        spine [
+         0 .95 0
+         0 1 0
+        ]
+        orientation [
+         0 0 1 0
+         0 0 1 0
+        ]
+        scale [
+         1 1
+         1 1
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+  DEF Transform2 Transform {
+   children [
+    DEF dad_MINUTEHAND Transform {
+     rotation 1 0 0 1.571
+     children [
+      DEF MINUTEHAND Shape {
+       appearance Appearance {
+        material DEF Red Material {
+         ambientIntensity 0.200
+         shininess 0.200
+         diffuseColor 1 0 0
+        }
+       }
+       geometry DEF GeoSweptSurface1 Extrusion {
+        creaseAngle 0.524
+        crossSection [
+         -.06229 -.00366
+         .08427 -.00366
+         .04763 -2.34126
+         -.06229 -.00366
+        ]
+        spine [
+         0 .95 0
+         0 1 0
+        ]
+        orientation [
+         0 0 1 0
+         0 0 1 0
+        ]
+        scale [
+         1 1
+         1 1
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+  DEF Transform1 Transform {
+   children [
+    DEF dad_SECONDHAND Transform {
+     rotation 1 0 0 1.571
+     scale .5 1 1.2
+     children [
+      DEF SECONDHAND Shape {
+       appearance Appearance {
+        material DEF Yellow Material {
+         ambientIntensity 0.200
+         shininess 0.200
+         diffuseColor 1 1 0
+        }
+       }
+       geometry DEF GeoSweptSurface2 Extrusion {
+        creaseAngle 0.524
+        crossSection [
+         -.06229 -.00366
+         .08427 -.00366
+         .04763 -2.34126
+         -.06229 -.00366
+        ]
+        spine [
+         0 .95 0
+         0 1 0
+        ]
+        orientation [
+         0 0 1 0
+         0 0 1 0
+        ]
+        scale [
+         1 1
+         1 1
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+  DEF CM TimeSensor {
+   cycleInterval 1.000
+   loop TRUE
+   startTime -1.000
+  }
+  DEF REFRESH TimeSensor {
+   cycleInterval 0.100
+   loop TRUE
+   startTime -1.000
+  }
+  DEF more_time Script {
+    eventOut SFRotation second_changed
+    eventIn SFTime set_second
+    eventOut SFRotation minute_changed
+    eventOut SFRotation hour_changed
+   url [ "javascript:
+function initialize(){
+}
+
+
+function set_second () {
+ var today = new Date();
+ var seconds = today.getSeconds();
+ var minutes =  -(Math.PI/30)*today.getMinutes();
+ var hours = -(Math.PI/6)*today.getHours();
+ second_changed[3] = -(Math.PI/30)*seconds ;
+ minute_changed[3]= minutes -(Math.PI/30)*seconds/60; 
+ hour_changed[3]= hours -(Math.PI/6)*today.getMinutes()/60;
+}" ]
+  }
+  DEF cm_enabled Script {
+    eventOut SFBool start
+    eventIn SFTime set_milli
+   url [ "javascript: // ### X3D Browser.print() not supported by all VRML97 viewers, instead simply using print()
+
+function set_milli () {
+ var today = new Date();
+ var milli = today.getTime();
+ var milli_changed= (milli/1000) - Math.floor(milli/1000);
+ printing (milli_changed);
+ if (milli_changed>0 && milli_changed<0.1) {start=true;}
+}" ]
+  }
+ ]
+}
+DEF vizx_init TimeSensor {
+ cycleInterval 0.100
+ loop TRUE
+}
+ROUTE vizx_init.cycleTime TO CM.startTime
+ROUTE vizx_init.cycleTime TO REFRESH.startTime
+ROUTE vizx_init.cycleTime TO vizx_init.stopTime
+ROUTE REFRESH.cycleTime TO cm_enabled.set_milli
+ROUTE REFRESH.time TO more_time.set_second
+ROUTE more_time.second_changed TO Transform1.set_rotation
+ROUTE cm_enabled.start TO CM.set_enabled
+ROUTE more_time.minute_changed TO Transform2.set_rotation
+ROUTE more_time.hour_changed TO Transform3.set_rotation
